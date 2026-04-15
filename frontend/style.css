@@ -1,0 +1,242 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f0f2f5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.card.wide {
+  max-width: 600px;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.25rem;
+}
+
+.hint {
+  font-size: 0.78rem;
+  color: #999;
+  margin-bottom: 1.75rem;
+}
+
+/* ── Form fields ── */
+.field {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.35rem;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #6c63ff;
+}
+
+button[type="submit"],
+.btn-primary {
+  width: 100%;
+  padding: 0.75rem;
+  background: #6c63ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+button[type="submit"]:hover {
+  background: #574fd6;
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Error ── */
+.error {
+  color: #e53e3e;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Home page ── */
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.welcome {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.btn-logout {
+  background: none;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #555;
+  transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  border-color: #e53e3e;
+  color: #e53e3e;
+}
+
+/* ── Add form ── */
+.add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.add-form input {
+  flex: 1;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.add-form input:focus {
+  border-color: #6c63ff;
+}
+
+.add-form button {
+  width: auto;
+  padding: 0.65rem 1.25rem;
+  margin-top: 0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+/* ── Todo list ── */
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #eee;
+  border-radius: 8px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.todo-item:hover {
+  border-color: #d0ccff;
+  background: #faf9ff;
+}
+
+.todo-item.done .todo-title {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+.todo-check {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.todo-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #6c63ff;
+  cursor: pointer;
+}
+
+.todo-title {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-left: 0.5rem;
+}
+
+.todo-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.25rem;
+  border-radius: 4px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  width: auto;
+  margin-top: 0;
+}
+
+.todo-actions button:hover {
+  opacity: 1;
+}
+
+.empty {
+  text-align: center;
+  color: #bbb;
+  font-size: 0.9rem;
+  padding: 2rem 0;
+}
