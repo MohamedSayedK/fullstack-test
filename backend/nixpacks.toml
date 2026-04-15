@@ -1,8 +1,0 @@
-[phases.install]
-cmds = ["npm ci"]
-
-[phases.build]
-cmds = ["npx prisma generate", "npx nest build"]
-
-[start]
-cmd = "node dist/main"
