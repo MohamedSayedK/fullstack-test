@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+# Prisma's query engine requires OpenSSL on Alpine
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Copy package files and install ALL deps (including devDeps for build)
