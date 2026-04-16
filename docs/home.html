@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Todos</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="card wide">
+    <div class="home-header">
+      <div>
+        <h1>My Todos</h1>
+        <span id="welcomeMsg" class="welcome"></span>
+      </div>
+      <button id="logoutBtn" class="btn-logout">Log Out</button>
+    </div>
+
+    <form id="addForm" class="add-form">
+      <input type="text" id="newTodo" placeholder="Add a new todo…" required />
+      <button type="submit">Add</button>
+    </form>
+
+    <p id="loadError" class="error hidden"></p>
+    <ul id="todoList" class="todo-list"></ul>
+    <p id="emptyMsg" class="empty hidden">No todos yet. Add one above!</p>
+  </div>
+
+  <script>
+    // ← Change this to your Railway URL after deploying
+    const API_URL = 'https://fullstack-test-production.up.railway.app';
+
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username') || 'there';
+
+    if (!token) {
+      window.location.href = 'index.html';
+    }
+
+    document.getElementById('welcomeMsg').textContent = `Hello, ${username}`;
+
+    function authHeaders() {
+      return {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+    }
+
+    async function handleResponse(res) {
+      if (res.status === 401) {
+        localStorage.clear();
+        window.location.href = 'index.html';
+      }
+      return res.json();
+    }
+
+    function renderTodos(todos) {
+      const list = document.getElementById('todoList');
+      const emptyMsg = document.getElementById('emptyMsg');
+      list.innerHTML = '';
+
+      if (todos.length === 0) {
+        emptyMsg.classList.remove('hidden');
+        return;
+      }
+      emptyMsg.classList.add('hidden');
+
+      todos.forEach((todo) => {
+        const li = document.createElement('li');
+        li.className = `todo-item${todo.completed ? ' done' : ''}`;
+        li.dataset.id = todo.id;
+
+        li.innerHTML = `
+          <label class="todo-check">
+            <input type="checkbox" ${todo.completed ? 'checked' : ''} />
+            <span class="todo-title">${escapeHtml(todo.title)}</span>
+          </label>
+          <div class="todo-actions">
+            <button class="btn-edit" title="Edit">✏️</button>
+            <button class="btn-delete" title="Delete">🗑️</button>
+          </div>
+        `;
+
+        // Toggle completed
+        li.querySelector('input[type=checkbox]').addEventListener('change', async (e) => {
+          const res = await fetch(`${API_URL}/todos/${todo.id}`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify({ completed: e.target.checked }),
+          });
+          await handleResponse(res);
+          loadTodos();
+        });
+
+        // Edit
+        li.querySelector('.btn-edit').addEventListener('click', async () => {
+          const newTitle = prompt('Edit todo:', todo.title);
+          if (newTitle === null || newTitle.trim() === '') return;
+          const res = await fetch(`${API_URL}/todos/${todo.id}`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify({ title: newTitle.trim() }),
+          });
+          await handleResponse(res);
+          loadTodos();
+        });
+
+        // Delete
+        li.querySelector('.btn-delete').addEventListener('click', async () => {
+          if (!confirm('Delete this todo?')) return;
+          const res = await fetch(`${API_URL}/todos/${todo.id}`, {
+            method: 'DELETE',
+            headers: authHeaders(),
+          });
+          await handleResponse(res);
+          loadTodos();
+        });
+
+        list.appendChild(li);
+      });
+    }
+
+    async function loadTodos() {
+      const res = await fetch(`${API_URL}/todos`, { headers: authHeaders() });
+      const data = await handleResponse(res);
+      renderTodos(Array.isArray(data) ? data : []);
+    }
+
+    document.getElementById('addForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('newTodo');
+      const title = input.value.trim();
+      if (!title) return;
+
+      const res = await fetch(`${API_URL}/todos`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ title }),
+      });
+      await handleResponse(res);
+      input.value = '';
+      loadTodos();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    });
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    loadTodos();
+  </script>
+</body>
+</html>
